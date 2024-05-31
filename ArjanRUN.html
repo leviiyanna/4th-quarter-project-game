@@ -147,49 +147,69 @@
         <a href="#home"><img src="https://i.pinimg.com/736x/19/c6/e8/19c6e883d386d2372fa3c47c14e8fba1.jpg" alt="Home"></a>
         <a href="#settings"><img src="https://i.pinimg.com/736x/6a/8d/ea/6a8dea32d59ee3aa5462cddb3754a56c.jpg" alt="Settings"></a>
         <a href="#menu"><img src="https://i.pinimg.com/736x/9f/ec/a8/9feca878e35aeca3433c740815f1a628.jpg" alt="Menu"></a>
-        <a href="#pause"><img src="https://i.pinimg.com/736x/7a/d0/a0/7ad0a00ac4d1bcf87621261674b0130b.jpg" alt="Pause"></a>
-    </div>
+        <a href="#pause"><img src="https://i.pinimg.com/736x/7a/d0/a0/7ad0a00ac4d1bcf. 
+================. 
+======================= Pause the game by pressing the pause button
+<button id="pause">Pause</button>
 
-    <div id="game-container">
-        <div id="player"></div>
-        <div id="obstacle"></div>
-        <div id="game-over">
-            <span>Game Over</span>
-            <button>Try Again</button>
-        </div>
-    </div>
+<div id="game-container">
+    <div id="player"></div>
+    <div id="obstacle"></div>
+</div>
 
-    <script>
-        let gameOver = false;
+<div id="game-over">
+    <span>Game Over</span>
+    <button id="restart">Restart</button>
+</div>
 
-        document.querySelector("#game-over button").addEventListener("click", () => {
-            location.reload();
-        });
+<script>
+    let player = document.getElementById("player");
+    let obstacle = document.getElementById("obstacle");
+    let gameOver = document.getElementById("game-over");
+    let restartButton = document.getElementById("restart");
+    let isPaused = false;
+    let playerX = 50;
+    let playerY = 20;
+    let obstacleX = -50;
+    let obstacleY = 20;
 
-        document.querySelector("#game-container").addEventListener("keydown", (e) => {
-            if (e.key === " ") {
-                let player = document.querySelector("#player");
-                player.style.bottom = (parseInt(player.style.bottom) - 50) + "px";
+    function handleRestart() {
+        playerX = 50;
+        playerY = 20;
+        obstacleX = -50;
+        obstacleY = 20;
+        player.style.left = playerX + "px";
+        player.style.bottom = playerY + "px";
+        obstacle.style.right = obstacleX + "px";
+        obstacle.style.bottom = obstacleY + "px";
+        gameOver.style.display = "none";
+        isPaused = false;
+    }
 
-                if (parseInt(player.style.bottom) < 0) {
-                    gameOver = true;
-                    document.querySelector("#game-over").style.display = "flex";
-                }
-            }
-        });
-
-        function checkCollision() {
-            let player = document.querySelector("#player");
-            let obstacle = document.querySelector("#obstacle");
-
-            if (player.getBoundingClientRect().bottom >= obstacle.getBoundingClientRect().top) {
-                gameOver = true;
-                document.querySelector("#game-over").style.display = "flex";
-            }
+    function update() {
+        if (isPaused) {
+            return;
         }
 
-        setInterval(checkCollision, 100);
-    </script>
+        obstacleX += 2;
+        obstacle.style.right = obstacleX + "px";
+
+        if (playerX + 200 > obstacleX && playerY + 200 > obstacleY) {
+            gameOver.style.display = "flex";
+            return;
+        }
+
+        requestAnimationFrame(update);
+    }
+
+    function handlePause() {
+        isPaused = !isPaused;
+    }
+
+    document.getElementById("pause").addEventListener("click", handlePause);
+    restartButton.addEventListener("click", handleRestart);
+    update();
+</script>
 
 </body>
 
