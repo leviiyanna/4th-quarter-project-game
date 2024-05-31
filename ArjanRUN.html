@@ -41,127 +41,91 @@
        .navigation img {
             width: 50px;
             height: 50px; 
-        }
-
-       .content {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: url("https://art.pixilart.com/f0c67138e03caef.gif") no-repeat center center;
-            background-size: cover;
-        }
-
-        #game-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        #player {
-            position: absolute;
-            bottom: 20px;
-            left: 50px;
-            width: 200px;
-            height: 200px;
-            background: url("https://i.pinimg.com/originals/e3/37/85/e33785733a79ee3568b57424911ae562.png") no-repeat;
-            background-size: contain;
-        }
-
-        #obstacle {
-            position: absolute;
-            bottom: 20px;
-            right: -50px;
-            width: 100px;
-            height: 100px;
-            background: url("https://i.pinimg.com/originals/18/95/5a/18955a3d3cfac0dbd6998df807370c29.png") no-repeat;
-            background-size: contain;
-            animation: moveObstacle 3s linear infinite;
+            cursor: pointer;
         }
 
        .game-over-popup {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+       .game-over-popup .content {
             background-color: #333;
             padding: 20px;
-            border-radius: 10px;
-            display: none;
+            border-radius: 4px;
+            color: white;
+            text-align: center;
         }
 
-       .game-over-popup.show {
-            display: block;
+       .game-over-popup .content h1 {
+            margin-bottom: 20px;
         }
 
-        @keyframes moveObstacle {
-            from {
-                right: -50px;
-            }
-            to {
-                right: 100%;
-            }
+       .game-over-popup .content button {
+            padding: 10px;
+            background-color: #575757;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
         }
 
-        @media (max-width: 600px) {
-           .navigation {
-                flex-direction: column;
-            }
+       .game-over-popup .content button:hover {
+            background-color: #444;
+        }
 
-           .navigation a {
-                width: 100%;
-                text-align: center;
-                padding: 7px;
-                border-bottom: 1px solid #444;
-            }
-
-           .navigation a:last-child {
-                border-bottom: none;
-            }
+       .game-over-popup .content button:active {
+            background-color: #333;
         }
     </style>
-	
 </head>
-
 <body>
-
     <div class="navigation">
-        <a href="#home"><img src="https://i.pinimg.com/736x/19/c6/e8/19c6e883d386d2372fa3c47c14e8fba1.jpg" alt="Home"></a>
-        <a href="#settings"><img src="https://i.pinimg.com/736x/6a/8d/ea/6a8dea32d59ee3aa5462cddb3754a56c.jpg" alt="Settings"></a>
-        <a href="#menu"><img src="https://i.pinimg.com/736x/9f/ec/a8/9feca878e35aeca3433c740815f1a628.jpg" alt="Menu"></a>
-        <a href="#pause"><img src="https://i.pinimg.com/736x/7a/d0/a0/7ad0a00ac4d1bcf6cfedd249e7b8232d.jpg" alt="Pause"></a>
+        <a href="https://arjanhaas.com">Home</a>
+        <img src="https://i.imgur.com/cTQWmLQ.png" alt="Run, ARJAN, Run!" onclick="restart()">
     </div>
-    <div class="content">
-        <div id="game-container">
-            <div id="player"></div>
-            <div id="obstacle"></div>
-        </div>
-        <div class="game-over-popup">
+    <div class="game-over-popup">
+        <div class="content">
             <h1>GAME OVER</h1>
-            <button id="restart-button">Restart</button>
+            <p>Press the cat to restart</p>
+            <button onclick="restart()">Restart</button>
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const player = document.getElementById('player');
-            const obstacle = document.getElementById('obstacle');
-            const gameOverPopup = document.querySelector('.game-over-popup');
-            const restartButton = document.getElementById('restart-button');
-            let isJumping = false;
-            let gravity = 0.9;
-            let position = 0;
+        const player = document.querySelector('img');
+        const obstacle = document.createElement('div');
+        const gameOverPopup = document.querySelector('.game-over-popup');
+        const restartButton = document.querySelector('.game-over-popup button');
+        let isJumping = false;
+        let gravity = 0.9;
+        let position = 0;
+        let count = 0;
+        let timerId;
+        let obstacleAnimation;
 
-            function jump() {
-                if (isJumping) return;
-                let count = 0;
-                let timerId = setInterval(() => {
-                    
+        obstacle.style.position = 'absolute';
+        obstacle.style.width = '100px';
+        obstacle.style.height = '100px';
+        obstacle.style.background = 'red';
+        obstacle.style.bottom = '-50px';
+        document.body.appendChild(obstacle);
+
+        function jump() {
+            if (!isJumping) {
+                timerId = setInterval(() => {
                     if (count === 20) {
                         clearInterval(timerId);
                         let downTimerId = setInterval(() => {
-                            
-							//if mag move down
                             if (count === 0) {
                                 clearInterval(downTimerId);
                                 isJumping = false;
@@ -179,47 +143,48 @@
                     isJumping = true;
                 }, 20);
             }
+        }
 
-            function control(e) {
-                if (e.keyCode === 32) {
-                    jump();
-                }
+        function control(e) {
+            if (e.keyCode === 32) {
+                jump();
             }
+        }
 
-            function checkCollision() {
-                const playerRect = player.getBoundingClientRect();
-                const obstacleRect = obstacle.getBoundingClientRect();
+        function checkCollision() {
+            const playerRect = player.getBoundingClientRect();
+            const obstacleRect = obstacle.getBoundingClientRect();
 
-                if (playerRect.right > obstacleRect.left &&
-                    playerRect.left < obstacleRect.right &&
-                    playerRect.bottom > obstacleRect.top &&
-                    playerRect.top < obstacleRect.bottom) {
-                    gameOver();
-                }
+            if (playerRect.right > obstacleRect.left &&
+                playerRect.left < obstacleRect.right &&
+                playerRect.bottom > obstacleRect.top&&
+                playerRect.top < obstacleRect.bottom) {
+                gameOver();
             }
+        }
 
-            function gameOver() {
-                gameOverPopup.classList.add('show');
-                document.removeEventListener("keydown", control);
-            }
+        function gameOver() {
+            gameOverPopup.style.display = 'flex';
+            document.removeEventListener("keydown", control);
+            clearInterval(obstacleAnimation);
+        }
 
-            function restart() {
-                gameOverPopup.classList.remove('show');
-                player.style.bottom = "20px";
-                obstacle.style.right = "-50px";
-                document.addEventListener("keydown", control);
-            }
-
+        function restart() {
+            gameOverPopup.style.display = 'none';
+            player.style.bottom = "20px";
+            obstacle.style.right = "-50px";
             document.addEventListener("keydown", control);
-            restartButton.addEventListener("click", restart);
-
-            let obstacleAnimation = setInterval(() => {
+            obstacleAnimation = setInterval(() => {
                 obstacle.style.right = parseInt(obstacle.style.right) + 10 + "px";
                 checkCollision();
             }, 20);
-        });
-    </script>
-	
-</body>
+        }
 
+        document.addEventListener("keydown", control);
+        obstacleAnimation = setInterval(() => {
+            obstacle.style.right = parseInt(obstacle.style.right) + 10 + "px";
+            checkCollision();
+        }, 20);
+    </script>
+</body>
 </html>
