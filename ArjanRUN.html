@@ -1,190 +1,180 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Run, ARJAN, Run!</title>
-	
+    <title>ARJAN, RUN!</title>
     <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            overflow: hidden;
         }
 
-       .navigation {
+       .navbar {
             display: flex;
             justify-content: space-around;
             align-items: center;
             background-color: #333;
             padding: 6px;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 10;
         }
 
-       .navigation a {
+       .navbar a {
             padding: 0.75em;
             border-radius: 4px;
-			transition: background-color 0.3s ease;
-        }
-
-       .navigation a:hover {
-            background-color: #575757;
-        }
-
-       .navigation a:active {
-            background-color: #444;
-        }
-
-       .navigation img {
-            width: 50px;
-            height: 50px; 
-            cursor: pointer;
-        }
-
-       .game-over-popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-       .game-over-popup .content {
-            background-color: #333;
-            padding: 20px;
-            border-radius: 4px;
-            color: white;
-            text-align: center;
-        }
-
-       .game-over-popup .content h1 {
-            margin-bottom: 20px;
-        }
-
-       .game-over-popup .content button {
-            padding: 10px;
-            background-color: #575757;
-            border: none;
-            border-radius: 4px;
-            color: white;
-            cursor: pointer;
-            margin-top: 20px;
             transition: background-color 0.3s ease;
         }
 
-       .game-over-popup .content button:hover {
+       .navbar a:hover {
+            background-color: #575757;
+        }
+
+       .navbar a:active {
             background-color: #444;
         }
 
-       .game-over-popup .content button:active {
-            background-color: #333;
+       .navbar img {
+            width: 50px;
+            height: 50px; 
+        }
+
+       .content {
+            height: calc(100vh - 60px); 
+            background: url('https://i.pinimg.com/736x/2c/21/0b/2c210b32adb887a8308064cd6a7742fd.jpg') no-repeat center center;
+            background-size: cover;
+            position: relative;
+        }
+
+       .floating-button {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+       .floating-button img {
+            width: 150px;
+            height: 150px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+       .floating-button img:hover {
+            transform: scale(1.1);
+        }
+
+       .obstacle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background-color: #FF0000;
+            border-radius: 50%;
+        }
+
+       .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #FFFFFF;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+
+       .game-over.show {
+            display: block;
+        }
+
+       .restart-button {
+            background-color: #4CAF50;
+            color: #FFFFFF;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+       .restart-button:hover {
+            background-color: #3e8e41;
+        }
+
+        @media (max-width: 600px) {
+           .navbar {
+                flex-direction: column;
+            }
+
+           .navbar a {
+                width: 100%;
+                text-align: center;
+                padding: 7px;
+                border-bottom: 1px solid #444;
+            }
+
+           .navbar a:last-child {
+                border-bottom: none;
+            }
+
+           .content {
+                height: calc(100vh - 100px); 
+            }
+
+           .floating-button img {
+                width: 160px; 
+                height: 200px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="navigation">
-        <a href="https://arjanhaas.com">Home</a>
-        <img src="https://i.imgur.com/cTQWmLQ.png" alt="Run, ARJAN, Run!" onclick="restart()">
+    <div class="navbar">
+        <a href="#home"><img src="https://i.pinimg.com/736x/19/c6/e8/19c6e883d386d2372fa3c47c14e8fba1.jpg" alt="Home"></a>
+        <a href="#settings"><img src="https://i.pinimg.com/736x/6a/8d/ea/6a8dea32d59ee3aa5462cddb3754a56c.jpg" alt="Settings"></a>
+        <a href="#menu"><img src="https://i.pinimg.com/736x/9f/ec/a8/9feca878e35aeca3433c740815f1a628.jpg" alt="Menu"></a>
+        <a href="#pause"><img src="https://i.pinimg.com/736x/7a/d0/a0/7ad0a00ac4d1bcf6cfedd249e7b8232d.jpg" alt="Pause"></a>
     </div>
-    <div class="game-over-popup">
-        <div class="content">
+    <div class="content">
+        <a href="ArjanRUN.html" class="floating-button">
+            <img src="https://i.pinimg.com/originals/28/13/6b/28136b83afd6b3a10be0b98e17a039a8.png" alt="Play Button">
+        </a>
+        <div class="obstacle"></div>
+        <div class="game-over">
             <h1>GAME OVER</h1>
-            <p>Press the cat to restart</p>
-            <button onclick="restart()">Restart</button>
+            <button class="restart-button">Restart</button>
         </div>
     </div>
     <script>
-        const player = document.querySelector('img');
-        const obstacle = document.createElement('div');
-        const gameOverPopup = document.querySelector('.game-over-popup');
-        const restartButton = document.querySelector('.game-over-popup button');
-        let isJumping = false;
-        let gravity = 0.9;
-        let position = 0;
-        let count = 0;
-        let timerId;
-        let obstacleAnimation;
-
-        obstacle.style.position = 'absolute';
-        obstacle.style.width = '100px';
-        obstacle.style.height = '100px';
-        obstacle.style.background = 'red';
-        obstacle.style.bottom = '-50px';
-        document.body.appendChild(obstacle);
-
-        function jump() {
-            if (!isJumping) {
-                timerId = setInterval(() => {
-                    if (count === 20) {
-                        clearInterval(timerId);
-                        let downTimerId = setInterval(() => {
-                            if (count === 0) {
-                                clearInterval(downTimerId);
-                                isJumping = false;
-                            }
-                            position -= 5;
-                            count--;
-                            position = position * gravity;
-                            player.style.bottom = position + "px";
-                        }, 20);
-                    }
-                    position += 30;
-                    count++;
-                    position = position * gravity;
-                    player.style.bottom = position + "px";
-                    isJumping = true;
-                }, 20);
-            }
-        }
-
-        function control(e) {
-            if (e.keyCode === 32) {
-                jump();
-            }
-        }
+        const obstacle = document.querySelector('.obstacle');
+        const gameOver = document.querySelector('.game-over');
+        const restartButton = document.querySelector('.restart-button');
+        const player = document.querySelector('.floating-button');
 
         function checkCollision() {
-            const playerRect = player.getBoundingClientRect();
             const obstacleRect = obstacle.getBoundingClientRect();
+            const playerRect = player.getBoundingClientRect();
 
-            if (playerRect.right > obstacleRect.left &&
-                playerRect.left < obstacleRect.right &&
-                playerRect.bottom > obstacleRect.top&&
-                playerRect.top < obstacleRect.bottom) {
-                gameOver();
+            if (obstacleRect.x < playerRect.right &&
+                obstacleRect.right > playerRect.x &&
+                obstacleRect.y < playerRect.bottom &&
+                obstacleRect.bottom > playerRect.y) {
+                gameOver.classList.add('show');
+                document.removeEventListener('click', checkCollision);
             }
         }
 
-        function gameOver() {
-            gameOverPopup.style.display = 'flex';
-            document.removeEventListener("keydown", control);
-            clearInterval(obstacleAnimation);
+        function restartGame() {
+            gameOver.classList.remove('show');
+            document.addEventListener('click', checkCollision);
         }
 
-        function restart() {
-            gameOverPopup.style.display = 'none';
-            player.style.bottom = "20px";
-            obstacle.style.right = "-50px";
-            document.addEventListener("keydown", control);
-            obstacleAnimation = setInterval(() => {
-                obstacle.style.right = parseInt(obstacle.style.right) + 10 + "px";
-                checkCollision();
-            }, 20);
-        }
+        document.addEventListener('click', checkCollision);
+        restartButton.addEventListener('click', restartGame);
 
-        document.addEventListener("keydown", control);
-        obstacleAnimation = setInterval(() => {
-            obstacle.style.right = parseInt(obstacle.style.right) + 10 + "px";
-            checkCollision();
-        }, 20);
+        // Make the obstacle smaller
+        obstacle.style.width = '30px';
+        obstacle.style.height = '30px';
     </script>
 </body>
 </html>
