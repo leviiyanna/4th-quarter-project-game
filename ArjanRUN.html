@@ -34,17 +34,17 @@
             background-color: #575757;
         }
 
-       .navigation a:active {
+      .navigation a:active {
             background-color: #444;
         }
 
-       .navigation img {
+      .navigation img {
             width: 50px;
             height: 50px; 
             cursor: pointer;
         }
 
-       .game-over-popup {
+      .game-over-popup {
             display: none;
             position: fixed;
             top: 0;
@@ -57,7 +57,7 @@
             align-items: center;
         }
 
-       .game-over-popup .content {
+      .game-over-popup.content {
             background-color: #333;
             padding: 20px;
             border-radius: 4px;
@@ -65,11 +65,11 @@
             text-align: center;
         }
 
-       .game-over-popup .content h1 {
+      .game-over-popup.content h1 {
             margin-bottom: 20px;
         }
 
-       .game-over-popup .content button {
+      .game-over-popup.content button {
             padding: 10px;
             background-color: #575757;
             border: none;
@@ -80,11 +80,11 @@
             transition: background-color 0.3s ease;
         }
 
-       .game-over-popup .content button:hover {
+      .game-over-popup.content button:hover {
             background-color: #444;
         }
 
-       .game-over-popup .content button:active {
+      .game-over-popup.content button:active {
             background-color: #333;
         }
     </style>
@@ -116,7 +116,7 @@
         obstacle.style.position = 'absolute';
         obstacle.style.width = '100px';
         obstacle.style.height = '100px';
-        obstacle.style.background = 'red';
+        obstacle.style.background = 'ed';
         obstacle.style.bottom = '-50px';
         document.body.appendChild(obstacle);
 
@@ -157,7 +157,7 @@
 
             if (playerRect.right > obstacleRect.left &&
                 playerRect.left < obstacleRect.right &&
-                playerRect.bottom > obstacleRect.top&&
+                playerRect.bottom > obstacleRect.top &&
                 playerRect.top < obstacleRect.bottom) {
                 gameOver();
             }
@@ -167,6 +167,7 @@
             gameOverPopup.style.display = 'flex';
             document.removeEventListener("keydown", control);
             clearInterval(obstacleAnimation);
+            isJumping = false;
         }
 
         function restart() {
